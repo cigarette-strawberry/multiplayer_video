@@ -3,11 +3,12 @@
  * @Author: wu0304
  * @Date: 2023-08-31 22:45:57
  * @LastEditors: wu0304
- * @LastEditTime: 2023-09-02 00:13:14
+ * @LastEditTime: 2023-09-02 00:46:02
  */
 const { WebSocketServer } = require('ws')
 
 // join 主动加入房间
+// resp-join 告知加入者对方是谁
 // leave 主动离开房间
 // new-peer 有人加入房间，通知已经在房间的人
 // peer-leave 有人离开房间，通知已经在房间的人
@@ -15,7 +16,7 @@ const { WebSocketServer } = require('ws')
 // answer 发送offer给对端peer
 // candidate 发送candidate给对端peer
 const SIGNAL_TYPE_JOIN = 'join'
-const SIGNAL_TYPE_RESP_JOIN = 'resp-join' // 告知加入者对方是谁
+const SIGNAL_TYPE_RESP_JOIN = 'resp-join'
 const SIGNAL_TYPE_LEAVE = 'leave'
 const SIGNAL_TYPE_NEW_PEER = 'new-peer'
 const SIGNAL_TYPE_PEER_LEAVE = 'peer-leave'

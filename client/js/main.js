@@ -1,16 +1,16 @@
 'use strict'
 
 // join 主动加入房间
-// leave 主动离开房间
 // resp-join 告知加入者对方是谁
+// leave 主动离开房间
 // new-peer 有人加入房间，通知已经在房间的人
 // peer-leave 有人离开房间，通知已经在房间的人
 // offer 发送offer给对端peer
 // answer 发送offer给对端peer
 // candidate 发送candidate给对端peer
 const SIGNAL_TYPE_JOIN = 'join'
-const SIGNAL_TYPE_LEAVE = 'leave'
 const SIGNAL_TYPE_RESP_JOIN = 'resp-join'
+const SIGNAL_TYPE_LEAVE = 'leave'
 const SIGNAL_TYPE_NEW_PEER = 'new-peer'
 const SIGNAL_TYPE_PEER_LEAVE = 'peer-leave'
 const SIGNAL_TYPE_OFFER = 'offer'
