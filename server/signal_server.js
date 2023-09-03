@@ -3,7 +3,7 @@
  * @Author: wu0304
  * @Date: 2023-08-31 22:45:57
  * @LastEditors: wu0304
- * @LastEditTime: 2023-09-02 00:46:02
+ * @LastEditTime: 2023-09-03 20:59:45
  */
 const { WebSocketServer } = require('ws')
 
@@ -24,12 +24,12 @@ const SIGNAL_TYPE_OFFER = 'offer'
 const SIGNAL_TYPE_ANSWER = 'answer'
 const SIGNAL_TYPE_CANDIDATE = 'candidate'
 
+/*********WebSocket*********/
 exports.listen = function (server) {
   const websocket = new WebSocketServer({ server })
   websocket.on('connection', socket => {
     socket.on('message', function (message) {
       let jsonMsg = JSON.parse(message)
-      console.log(jsonMsg)
       switch (jsonMsg.cmd) {
         case SIGNAL_TYPE_JOIN:
           socket.client = handleJoin(jsonMsg, socket) // 加入房间
@@ -56,11 +56,12 @@ exports.listen = function (server) {
     })
 
     socket.on('error', function (err) {
-      console.log('监听到错误:' + err)
+      console.error('监听到错误:' + err)
     })
   })
 }
 
+/*********管理房间的类*********/
 /**
  * @description: 房间表
  * @return {*}
@@ -166,7 +167,7 @@ function handleJoin(message, socket) {
   }
 
   if (roomMap.size() >= 2) {
-    console.log('roomId:' + roomId + ' 已经有两人存在，请使用其他房间')
+    console.warn('roomId:' + roomId + ' 已经有两人存在，请使用其他房间')
     // 加信令通知客户端，房间已满
     return
   }
@@ -179,7 +180,7 @@ function handleJoin(message, socket) {
     for (let i in clients) {
       let remoteUid = clients[i].key
       if (remoteUid !== uid) {
-        // 通知房间中另一个人
+        // 通知房间中其他人
         let jsonMsg = {
           cmd: SIGNAL_TYPE_NEW_PEER,
           remoteUid: uid
@@ -235,12 +236,11 @@ function handleLeave(message) {
   }
 }
 
+/*********WebRTC*********/
 function handleOffer(message) {
   let roomId = message.roomId
   let uid = message.uid
   let remoteUid = message.remoteUid
-
-  console.log('handleOffer uid: ' + uid + 'transfer  offer  to remoteUid' + remoteUid)
 
   let roomMap = roomTableMap.get(roomId)
   if (roomMap == null) {
@@ -267,8 +267,6 @@ function handleAnswer(message) {
   let uid = message.uid
   let remoteUid = message.remoteUid
 
-  console.log('handleAnswer uid: ' + uid + 'transfer answer  to remoteUid' + remoteUid)
-
   let roomMap = roomTableMap.get(roomId)
   if (roomMap == null) {
     console.log("handleAnswer can't find then roomId " + roomId)
@@ -293,8 +291,6 @@ function handleCandidate(message) {
   let roomId = message.roomId
   let uid = message.uid
   let remoteUid = message.remoteUid
-
-  console.log('handleCandidate uid: ' + uid + 'transfer candidate  to remoteUid' + remoteUid)
 
   let roomMap = roomTableMap.get(roomId)
   if (roomMap == null) {
